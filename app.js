@@ -7,13 +7,16 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var questions=require('./routes/questions');// for admin to add, update, delete and find any question.
 var app = express();
-
+//app.use(app.router);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
+//database setup
+/*var mongojs=require('mongojs');
+var url='mongodb://localhost:27017/appdb';
+var db=mongojs(url);*/
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -24,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-
++app.use('/questions',questions);
 app.listen(7000,function(){
 console.log("Hello World");
 });
