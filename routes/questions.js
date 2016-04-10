@@ -1,55 +1,76 @@
 var express = require('express');
 var fs=require('fs');
- var PDFParser = require("pdf2json/PDFParser");
- var pdfParser=new PDFParser();
+var mkdirp=require('mkdirp');
 var router = express.Router();
 var mongojs=require('mongojs');
+const Imagemin = require('imagemin');
 var db=mongojs("appdb",['questions']);
-router.route('/add').post(function(req,res,next){
-  var serial_no=req.body.serial_no;
-  var subject=req.body.subject;
-  var topic=req.body.topic;
-  var sub_topic=req.body.sub_topic;
-  var question=req.body.question;
-  var answer=req.body.answer;
-  var concept_behind=req.body.concept_behind;
 
-  var question_data={
-  	'serial_no':serial_no,
-  	'subject':subject,
-  	'topic'  :topic,
-  	'sub_topic':sub_topic,
-  	'question' :question,
-  	'answer'   :answer,
-  	'concept_behind':concept_behind
-      
-   }
-   db.questions.findOne({'serial_no':serial_no},function(err,save){
-   	  if(!save){
-          db.questions.insert(question_data,function(err,save){
-          	if(err){
-			console.log(err);
-		     }
-		 else {
-			console.log(save);
-			res.send({'status':'entered','question_data':save});
-		     }  
-          })
-   	    }
-   	  else{
+  var multer=require('multer');
 
-            res.send('question already exists');
-   	     }
-   	    
-   })
-})
-/*router.route('/dummy').post(function(req,res,next){
- pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError) );
-    pdfParser.on("pdfParser_dataReady", pdfData => {
-       fs.writeFile("./sample.json", JSON.stringify(pdfData));
-       res.send(pdfData);
-    });
 
-    pdfParser.loadPDF("./Sample.pdf");
-})*/
+   // for uploading question
+  var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+
+    var upload_path='./uploads'+'/'+req.body.subject+'/'+req.body.topic+'/'+req.body.sub_topic+'/';
+
+    if(!fs.existsSync(upload_path))
+      mkdirp.sync(upload_path);
+
+    callback(null, upload_path);
+  },
+  filename: function (req, file, callback) {
+    var temp=file.originalname.split(".");
+    callback(null, file.fieldname+'-'+req.body.subject + '-' +req.body.topic +'-'+req.body.sub_topic+'_'+req.body.serial_no+'.'+temp[temp.length-1]);
+  }
+  });
+
+  var upload_question= multer({ storage : storage}).fields([{'name':'question'},{'name':'answer'},{'name':'hint'}]);
+
+
+
+  router.route('/add').post(function(req,res,next){
+
+     upload_question(req,res,function(err) {
+        if(err) {
+            return res.send(err);
+        }
+         else
+            {
+              new Imagemin()
+              .src([req.files.question[0].path,req.files.answer[0].path,req.files.hint[0].path])
+              .dest(req.files.question[0].destination)
+              .use(Imagemin.optipng({optimizationLevel: 5}))
+              .run((err, files) => {
+               console.log(files);
+            });
+
+             var question_data={
+            'serial_no':req.body.serial_no,
+            'subject':req.body.subject,
+            'topic'  :req.body.topic,
+            'sub_topic':req.body.sub_topic,
+            'question' :req.files.question,
+            'answer'   :req.files.answer,
+            'hint':req.files.hint
+
+            } 
+          db.questions.insert({question_data},function(err,save){
+            if(err)
+            {
+              res.send(err);
+            }
+            else(!err&&save)
+              res.send(save);
+          });  
+        }
+      });
+   });
+   
+
+
+
+  
+
 module.exports=router;

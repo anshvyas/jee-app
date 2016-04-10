@@ -1,8 +1,10 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var router = express.Router();
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
 var mongojs=require('mongojs');
-var ObjectId = require('mongodb').ObjectID;
-var url='mongodb://localhost:27017/appdb';
+var ObjectId = require('mongojs').ObjectID;
 var db=mongojs("appdb",['users']);
 /*var MongoClient=require('mongodb').MongoClient;
 var assert=require ('assert');*/
