@@ -1,7 +1,7 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'start' ]
-2 info using npm@2.15.0
-3 info using node@v4.4.2
+2 info using npm@2.15.1
+3 info using node@v4.4.4
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info prestart node@0.0.0
 6 info start node@0.0.0
@@ -19,10 +19,10 @@
 9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 10 verbose pkgid node@0.0.0
 11 verbose cwd /home/anshul/Desktop/jee-app
-12 error Linux 3.19.0-49-generic
+12 error Linux 4.4.0-22-generic
 13 error argv "/usr/bin/nodejs" "/usr/bin/npm" "start"
-14 error node v4.4.2
-15 error npm  v2.15.0
+14 error node v4.4.4
+15 error npm  v2.15.1
 16 error code ELIFECYCLE
 17 error node@0.0.0 start: `node ./bin/www`
 17 error Exit status 1

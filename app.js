@@ -10,7 +10,16 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var questions=require('./routes/questions');
 var search=require('./routes/search');// for admin to add, update, delete and find any question.
+var to_sent=require('./routes/to_sent');
+var send_index=require('./routes/send_index');
+var testupload=require('./routes/testupload');
 var app = express();
+
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 //app.use(app.router);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,12 +39,15 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/questions',questions);
 app.use('/search',search);
+app.use ('/to_sent',to_sent);
+app.use('/send_index',send_index);
+app.use('/testupload',testupload);
 app.listen(7000,function(){
 console.log("Hello World");
 });
 
-app.get('/',function(req,res){
-      res.send("index.html");
+app.get('/form',function(req,res){
+      //res.send('/form.html');
 });
 
 

@@ -1,0 +1,62 @@
+<!Doctype <!DOCTYPE html>
+<html>
+<head>
+	<title>form</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+</head>
+<body>
+<div ng-app="myApp" ng-controller="maincontroller">
+<div class="container">
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4">
+    		<div class="panel panel-default">
+			  	<div class="panel-heading">
+			    	<h3 class="panel-title"></h3>
+			 	</div>
+			  	<div class="panel-body">
+			    	<form name="Question" role="form" ng-submit="insertdata()">
+                    <fieldset>
+			    	  	<div class="form-group">
+			    		    <input class="form-control" placeholder="Serial number" ng-model="serialnumber" type="text" required>
+			    		</div>
+			    		<div class="form-group">
+			    			<select class="form-control" ng-model="subject" placeholder="Subject" required>
+    							<option value="1">Physics</option>
+   								<option value="2">Chemistry</option>
+    							<option value="3">Maths</option>
+    							
+  							</select>
+			    		</div>
+			    		<div class="form-group">
+			    			<input class="form-control" placeholder="Topic" ng-model="topic" type="text" value="" required>
+
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    			<input class="form-control" placeholder="Sub-topic" ng-model="subtopic" type="text" value="" required>
+			    		</div>
+			    		<div class="form-group">
+			    			Upload Question<input  type="file" file-model ="question" required>
+			    		</div>
+			    		<div class="form-group">
+			    			Upload Answer<input  type="file" file-model ="answer"  required>
+			    		</div>
+			    		<div class="form-group">
+			    			Upload Hint<input  type="file" file-model ="hint" required>
+			    		</div>
+
+			    		
+			    		<input class="btn btn-md btn-success " type="submit" value="Save">
+			    	</fieldset>
+			      	</form>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+	<script type="text/javascript" src="angular/angular.min.js"></script>
+	<script type="text/javascript" src="angular/angular-route.min.js"></script>
+	<script src='controller.js'></script>>
+</body>
+</html>

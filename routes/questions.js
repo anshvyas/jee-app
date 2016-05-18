@@ -13,7 +13,7 @@ var db=mongojs("appdb",['questions']);
   var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
 
-    var upload_path='./uploads'+'/'+req.body.subject+'/'+req.body.topic+'/'+req.body.sub_topic+'/';
+    var upload_path='./uploads'+'/'+JSON.parse(req.body.subject)+'/'+JSON.parse(req.body.topic)+'/'+JSON.parse(req.body.sub_topic)+'/';
 
     if(!fs.existsSync(upload_path))
       mkdirp.sync(upload_path);
@@ -22,7 +22,7 @@ var db=mongojs("appdb",['questions']);
   },
   filename: function (req, file, callback) {
     var temp=file.originalname.split(".");
-    callback(null, file.fieldname+'-'+req.body.subject + '-' +req.body.topic +'-'+req.body.sub_topic+'_'+req.body.serial_no+'.'+temp[temp.length-1]);
+    callback(null, file.fieldname+'-'+JSON.parse(req.body.subject) + '-' +JSON.parse(req.body.topic)+'-'+JSON.parse(req.body.sub_topic)+'_'+JSON.parse(req.body.serial_no)+'.'+temp[temp.length-1]);
   }
   });
 
@@ -47,10 +47,10 @@ var db=mongojs("appdb",['questions']);
             });
 
              var question_data={
-            'serial_no':req.body.serial_no,
-            'subject':req.body.subject,
-            'topic'  :req.body.topic,
-            'sub_topic':req.body.sub_topic,
+            'serial_no':JSON.parse(req.body.serial_no),
+            'subject':JSON.parse(req.body.subject),
+            'topic'  :JSON.parse(req.body.topic),
+            'sub_topic':JSON.parse(req.body.sub_topic),
             'question' :req.files.question,
             'answer'   :req.files.answer,
             'hint':req.files.hint
