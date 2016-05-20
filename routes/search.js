@@ -6,7 +6,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 var mongojs=require('mongojs');
 var ObjectId = require('mongojs').ObjectID;
 var db=mongojs("appdb",['questions']);
-
+var fs=require('fs');
 router.route('/').post(function(req,res,next){
        var subject=req.body.subject;
        var topic  =req.body.topic;
@@ -46,5 +46,31 @@ router.route('/').post(function(req,res,next){
             res.send(arr);
           }
         })
-     })
+     });
+     router.route('/delete').post(function(req,res){
+       var key=req.body.id;
+       db.questions.findOne({_id:ObjectId(key)},function(err,save){
+        if(err)
+        {
+          res.send('cannot delete');
+        }
+        else if(save)
+        {
+        question_path=save.question_data.question[0].path;
+        answer_path=save.question_data.answer[0].path;
+        hint_path=save.question_data.hint[0].path;
+        var del_arr=[question_path,answer_path,hint_path];
+        del_arr.forEach(function(element){
+          fs.unlinkSync(element);
+        })
+       db.questions.remove( {_id:ObjectId(key)},function(err,save){
+        if(err)
+          res.send(err);
+        else
+          res.send(save);
+       })
+        }
+       })
+
+     });
      module.exports = router;

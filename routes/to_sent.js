@@ -6,15 +6,16 @@ router.use(bodyParser.urlencoded({ extended: false }));
 var mongojs=require('mongojs');
 var ObjectId = require('mongojs').ObjectID;
 var db=mongojs("appdb",['users','questions','to_sent']);
-router.get('/:subject/:topic/:sub_topic/:id',function(req,res){
-       var subject=req.params.subject;
-       var topic=req.params.topic;
-       var sub_topic=req.params.sub_topic;
-       var id=req.params.id;
+router.route('/').post(function(req,res,next){
+       var subject=req.body.subject;
+       var topic=req.body.topic;
+       var sub_topic=req.body.sub_topic;
+       var id=req.body.id;
        db.to_sent.find({'user_id':id},function(err,save){
        // console.log(save);
-       	 if(save.length==0)
+       	  if(true)
        	  {
+            //save.length==0 to be uncommented later
              db.questions.find({$and:[{'question_data.subject':subject},
             	{'question_data.topic':topic},
             	{'question_data.sub_topic':sub_topic}]},
@@ -77,6 +78,7 @@ router.get('/:subject/:topic/:sub_topic/:id',function(req,res){
                 }   
             })
        	  }
+            /*
             else if(save.length!=0){
                 var sent_q_id=[];
                 for(i=0;i<=save.length-1;i++)
@@ -153,7 +155,7 @@ router.get('/:subject/:topic/:sub_topic/:id',function(req,res){
                   console.log(err);
               })
 
-            }
+            }*/
       })
    })
  module.exports = router;
